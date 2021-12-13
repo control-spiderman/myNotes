@@ -145,6 +145,23 @@ s.lower()方法返回一个将s中的字母全部小写的新字符串。
 
 > 这两种方法也不会改变原来s的值
 
+##### 字符串判断
+
+str.isalnum()  所有字符都是数字或者字母，为真返回 Ture，否则返回 False。
+
+str.isalpha()   所有字符都是字母，为真返回 Ture，否则返回 False。
+
+str.isdigit()     所有字符都是数字，为真返回 Ture，否则返回 False。
+
+str.islower()    所有字符都是小写，为真返回 Ture，否则返回 False。
+
+str.isupper()   所有字符都是大写，为真返回 Ture，否则返回 False。
+
+str.istitle()      所有单词都是首字母大写，为真返回 Ture，否则返回 False。
+
+str.isspace()   所有字符都是空白字符，为真返回 Ture，否则返回 False。
+         
+
 ##### 去除多余空格
 
 s.strip()返回一个将s两端的多余空格除去的新字符串。
@@ -429,6 +446,23 @@ print(a)	#[10, 1, 11, 13, 11, 2]
 print(b)	#[1, 2, 10, 11, 11, 13]
 ```
 
+排序高级用法：
+
+```
+sorted(iterable[, cmp[, key[, reverse]]])
+```
+
+- cmp为函数，指定排序时进行比较的函数，可以指定一个函数或者lambda函数
+
+- key为函数，指定取待排序元素的哪一项进行排序
+
+  - ```
+    students  =  [( 'john' ,  'A' ,  15 ), ( 'jane' ,  'B' ,  12 ), ( 'dave' ,  'B' ,  10 )]
+    sorted (students, key = lambda  student : student[ 2 ])
+    ```
+
+- reverse输入bool值，指定是否反向
+
 ###### 列表反向
 
 `l.reverse()` 会将列表中的元素从后向前排列。
@@ -491,6 +525,53 @@ a = (10,)
 #### 元组方法
 
 由于元组是不可变的，所以只能有一些不可变的方法，例如计算元素个数 `count` 和元素位置 `index` ，用法与列表一样。
+
+#### zip()和zip(*)函数
+
+将**可迭代的对象**作为参数，将对象中对应的元素打包成一个个**元组**，然后返回由这些元组组成的列表。如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同。
+
+```python
+>>> a = [1,2,3]
+>>> b = [4,5,6]
+>>> c = [4,5,6,7,8]
+>>> zipped = zip(a,b)     # 打包为元组的列表
+[(1, 4), (2, 5), (3, 6)]
+>>> zip(a,c)              # 元素个数与最短的列表一致
+[(1, 4), (2, 5), (3, 6)]
+>>> zip(*zipped)          # 与 zip 相反，可理解为解压，为zip的逆过程，可用于矩阵的转置
+[(1, 2, 3), (4, 5, 6)]
+```
+
+举个例子：
+
+```python
+from numpy import *
+import pandas as pd
+def test(x):
+    return x, x+1, x+2
+
+data = [['Alex',10],['Bob',12],['Clarke',13],['ttt',16]]
+df = pd.DataFrame(data, columns=['Name','Age'])
+print(df['Age'].apply(lambda x: test(x)))
+print(list(zip(df['Age'].apply(lambda x: test(x)))))
+print(list(zip(*df['Age'].apply(lambda x: test(x)))))
+```
+
+输出为：
+
+```python
+0    (10, 11, 12)
+1    (12, 13, 14)
+2    (13, 14, 15)
+3    (16, 17, 18)
+Name: Age, dtype: object
+[((10, 11, 12),), ((12, 13, 14),), ((13, 14, 15),), ((16, 17, 18),)]
+[(10, 12, 13, 16), (11, 13, 14, 17), (12, 14, 15, 18)]
+```
+
+
+
+
 
 
 
@@ -3512,13 +3593,27 @@ def f(x = None):
 
 以函数作为参数，或者返回一个函数的函数是高阶函数，常用的例子有 `map` 和 `filter` 函数：
 
-1.`map(f, sq)` 函数将 `f` 作用到 `sq` 的每个元素上去，返回的是一个对象，需要**用list才能返回结果组成的列表**，相当于：
+1.`map(f, sq)` 函数将 `f` 作用到 `sq` 的每个元素上去，返回的是一个map对象，需要**用list才能返回结果组成的列表**，相当于：
 
 `[f(s) for s in sq]`
 
 ```python
 map(square, range(5))	#[0, 1, 4, 9, 16]
 ```
+
+上面这种方法需要f是个函数，还有下面一种用法：
+
+```python
+test = pd.read_csv('test_clean.csv', sep='\t')
+labelName = test.label.unique()
+labelIndex = range(len(labelName))
+labelNameToIndex = dict(zip(labelName, labelIndex))
+test["labelIndex"] = test.label.map(labelNameToIndex)
+```
+
+> **即方法二：iterableObject.map(dict)**
+
+
 
 2.`filter(f, sq)` 函数的作用相当于，对于 `sq` 的每个元素 `s`，返回的是一个对象，需要用list才能**返回所有 `f(s)` 为 `True` 的 `s` 组成的列表**，相当于：
 

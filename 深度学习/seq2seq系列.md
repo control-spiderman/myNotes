@@ -111,7 +111,7 @@ def load_data_nmt(batch_size,num_steps,num_examples=600):
 
 ## 编码器-解码器架构
 
-<img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014155434202.png" alt="image-20211014155434202" style="zoom:67%;" />
+<img src="seq2seq系列.assets/image-20211014155434202.png" alt="image-20211014155434202" style="zoom:67%;" />
 
 ### 编码器
 
@@ -154,7 +154,7 @@ class EncoderDecoder(nn.Module):
 
 ## seq2seq模型
 
-<img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014155847402.png" alt="image-20211014155847402" style="zoom: 80%;" />
+<img src="seq2seq系列.assets/image-20211014155847402.png" alt="image-20211014155847402" style="zoom: 80%;" />
 
 ### 编码器
 
@@ -358,7 +358,7 @@ def predict_seq2seq(net,src_sentence,src_vocab,tgt_vocab,num_steps
 
 bleu定义如下：
 
-<img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014185518053.png" alt="image-20211014185518053" style="zoom: 67%;" />
+<img src="seq2seq系列.assets/image-20211014185518053.png" alt="image-20211014185518053" style="zoom: 67%;" />
 
 其中 𝑘 是用于匹配的最长的 𝑛 元语法。
 
@@ -386,6 +386,6 @@ def bleu(pred_seq, label_seq, k):
 
 束搜索介于穷举搜索和贪心搜索之间。第一次选取前K个大的值，然后一直向下搜索，最终得到k个结果
 
-![image-20211014155543908](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014155543908.png)
+![image-20211014155543908](seq2seq系列.assets/image-20211014155543908.png)
 
 前面预测的模型中，使用的是贪心，速度快，但准确低。可以改用束搜索，在准确度和速度之间有个权衡。

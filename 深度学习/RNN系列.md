@@ -356,9 +356,9 @@ class RNNModel(nn.Module):
 
 ## GRU
 
-![image-20211014135502486](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014135502486.png)
+![image-20211014135502486](RNN系列.assets/image-20211014135502486.png)
 
-<img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014141313076.png" alt="image-20211014141313076" style="zoom:50%;" />
+<img src="RNN系列.assets/image-20211014141313076.png" alt="image-20211014141313076" style="zoom:50%;" />
 
 ```python
 num_inputs = vocab_size
@@ -372,9 +372,9 @@ d2l.train_ch8(model, train_iter, vocab, lr, num_epochs, device)
 
 ## LSTM
 
-![image-20211014135616913](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014135616913.png)
+![image-20211014135616913](RNN系列.assets/image-20211014135616913.png)
 
-<img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014141211626.png" alt="image-20211014141211626" style="zoom:50%;" />
+<img src="RNN系列.assets/image-20211014141211626.png" alt="image-20211014141211626" style="zoom:50%;" />
 
 ```python
 num_inputs = vocab_size
@@ -390,7 +390,7 @@ d2l.train_ch8(model, train_iter, vocab, lr, num_epochs, device)
 
 **深度rnn的下一时刻隐层状态和传给下一层的隐层状态相同。用框架实现的RNN会有两个输出，第一个输出就是最后一层的所有时间步的隐层状态，第二个输出是最后一个时刻的所有层的隐层输出**
 
-![image-20211014140039441](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014140039441.png)
+![image-20211014140039441](RNN系列.assets/image-20211014140039441.png)
 
 ```python
 vocab_size, num_hiddens, num_layers = len(vocab), 256, 2
@@ -410,7 +410,7 @@ d2l.train_ch8(model, train_iter, vocab, lr, num_epochs, device)
 
 双向rnn在代码层面实现较简单，就是正向是一个正常的rnn，反向是先将输入数据做个反转，然后再用一个同样结构（不同参数）的rnn，得到另一个输出，再将这个输出做反转，然后两个输出concat起来即可
 
-![image-20211014140220496](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211014140220496.png)
+![image-20211014140220496](RNN系列.assets/image-20211014140220496.png)
 
 > 注：双向rnn不能用来做预测，因为该网络每次训练都需要当前时间步前面和后面的数据，如果缺失了一边的数据就会出现严重缺陷
 
