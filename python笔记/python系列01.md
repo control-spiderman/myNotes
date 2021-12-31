@@ -1508,7 +1508,22 @@ with open('newfile.txt','w') as f:
         f.write('hello world: ' + str(i) + '\n')
 ```
 
+### 02.22 运算符
 
+#### divmod(a,b)
+
+将除法和取模结合起来操作，返回一个二元组，二元组第一个数是整数除法的结果，第二个数是取模结果
+
+```python
+print(divmod(353,60))
+# (5, 53)
+print(*divmod(353,60))
+# 5, 53)
+```
+
+> 符号\* 在元组、列表、集合前的作用是**解包**
+>
+> 符号\*\* 在字典前的作用也是解包
 
 
 
@@ -3598,7 +3613,7 @@ def f(x = None):
 `[f(s) for s in sq]`
 
 ```python
-map(square, range(5))	#[0, 1, 4, 9, 16]
+list(map(square, range(5)))	#[0, 1, 4, 9, 16]
 ```
 
 上面这种方法需要f是个函数，还有下面一种用法：

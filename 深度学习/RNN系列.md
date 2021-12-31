@@ -162,6 +162,10 @@ def load_data_time_machine(batch_size,num_steps,use_random_iter=False,max_tokens
 
 ## 循环神经网络
 
+循环神经网络输入处参数、隐层参数、输出参数都是**各自共享**的，这样就反映了**RNN中每一步都在做相同的事，只是输入不同**，这样大大降低了网络中需要学习的参数。
+
+![preview](RNN系列.assets/v2-3cde200effc6a43abeafb4c83b504c31_r.jpg)
+
 ### 从零实现
 
 **数字索引形式的数据还不足以在模型中训练，我们应当将每个词汇表中的词元都映射成唯一的向量，这里采用独热编码。**
@@ -209,7 +213,7 @@ def rnn(inputs,state,params):
     outputs = []
     for X in inputs:
         H = torch.tanh(torch.mm(W_xh,X)+torch.mm(H,W_hh)+b_h)
-        Y = torch.mm(H,W_hq)+b+q
+        Y = torch.mm(H,W_hq)+b_q
         outputs.append(Y)
     return torch.cat(outputs,dim=0) (H,)
 #rnn模型
@@ -356,6 +360,12 @@ class RNNModel(nn.Module):
 
 ## GRU
 
+**重置门用于控制保留多少过去的状态，重置门接近1相当于实现了普通RNN，重置门接近0相当于只使用当前输入，而忘记过去状态。这样操作得到的结果即为候选隐状态。**
+
+**更新门用来控制新的隐状态多少来自旧状态多少来自候选隐状态。更新门接近1就只保留旧状态，更新门接近0就选择新的候选隐状态作为新状态。**
+
+
+
 ![image-20211014135502486](RNN系列.assets/image-20211014135502486.png)
 
 <img src="RNN系列.assets/image-20211014141313076.png" alt="image-20211014141313076" style="zoom:50%;" />
@@ -371,6 +381,10 @@ d2l.train_ch8(model, train_iter, vocab, lr, num_epochs, device)
 
 
 ## LSTM
+
+**遗忘门用来控制保留多少过去的记忆元，输入门用来控制采用多少来自当前时间的新数据，两者的综合计算组成了当前的记忆元用于传输到下一时刻。**
+
+**输出门用来控制将多少记忆信息（记忆元）传递给预测部分（即当前的隐层）。如果输出门为1就将记忆信息传给隐层状态，用以更新隐层状态；如果输出门为0，就不更新隐层状态（保留为上一时刻的隐层状态）**
 
 ![image-20211014135616913](RNN系列.assets/image-20211014135616913.png)
 
