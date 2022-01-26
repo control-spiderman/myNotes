@@ -2219,3 +2219,94 @@ return None
 
 
 
+# 12 算法刷题总结
+
+## 排序函数
+
+> sort()方法和sorted()函数：
+>
+> sort()方法在原list上操作，会改变原list。sorted()函数会生成一个新的数据，不修改原数据。
+
+对于sorted()函数，可以对一维数据、二维数据、字典等来做各式各样的排序
+
+#### 常规排序
+
+```python
+sorted([5, 2, 3, 1, 4])
+# [1, 2, 3, 4, 5]
+```
+
+#### 定制化排序：lambda表达式
+
+```python
+# 对列表、元组排序
+student_tuples = [
+        ('john', 'A', 15),
+        ('jane', 'B', 12),
+        ('dave', 'B', 10),
+]
+sorted(student_tuples, key=lambda student: student[2])   # sort by age
+[('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+
+# 对字典排序：按照values排序获取value最大的key
+result_set = {'a': 10, 'b': 9, 'o': 10, 'd': 1, 'z': 1}
+sorted(result_set, key=lambda x: result_set[x], reverse=True)
+# ['a', 'o', 'b', 'd', 'z']
+```
+
+> 单独调用字典名的时候会获取keys的列表。lambda表达式处的x就是迭代前面列表(result_set的keys)中的每一个元素
+
+
+
+#### 定制化排序：operator模块
+
+```python
+from operator import itemgetter
+
+# 对列表、元组排序
+student_tuples = [
+        ('john', 'A', 15),
+        ('jane', 'B', 12),
+        ('dave', 'B', 10),
+]
+sorted(student_tuples, key=itemgetter(2))
+[('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+
+# 对字典排序：先按照value排序，然后按照key排序
+sorted(result_set.items(), key=itemgetter(1,0), reverse=True)
+# [('o', 10), ('a', 10), ('b', 9), ('z', 1), ('d', 1)]
+```
+
+> 此处result_set.items()会将字典的每个key，value对组成一个元组，这样就转化成前一个对列表元组的排序。
+
+> operator模块中除了itemgetter是按照索引来获取元素外，还有一个attrgetter是按照属性名来获取元素。后者用在实例化对象中按照对象的属性名来获取元素
+>
+> ```python
+> class Student:
+>         def __init__(self, name, grade, age):
+>                 self.name = name
+>                 self.grade = grade
+>                 self.age = age
+>         def __repr__(self):
+>                 return repr((self.name, self.grade, self.age))
+> student_objects = [
+>         Student('john', 'A', 15),
+>         Student('jane', 'B', 12),
+>         Student('dave', 'B', 10),
+> ]    
+> sorted(student_objects, key=attrgetter('grade', 'age'))
+> # [('john', 'A', 15), ('dave', 'B', 10), ('jane', 'B', 12)]
+> ```
+
+#### key参数的其他用法
+
+除了用key来指定排序的方式，还可以用它来**对即将排序的元素做其他预处理**
+
+```python
+# 在排序前，通过key指定函数来忽略大小写
+sorted("This is a test string from Andrew".split(), key=str.lower)
+# ['a', 'Andrew', 'from', 'is', 'string', 'test', 'This']
+sorted("This is a test string from Andrew".split())
+# ['Andrew', 'This', 'a', 'from', 'is', 'string', 'test']
+```
+
